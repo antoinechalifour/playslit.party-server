@@ -16,16 +16,6 @@ module.exports = class JoinPartyCommandHandler {
   async handle (command) {
     const party = await this.partyRepository.findByName(command.partyName)
 
-    if (!party) {
-      return CommandResponse.withError(
-        new Error(`Party "${command.partyName}" does not exist`)
-      )
-    } else if (party.code !== command.code) {
-      return CommandResponse.withError(
-        new Error(`Invalid passcode for party "${command.partyName}"`)
-      )
-    }
-
     if (command.accessToken) {
       try {
         const decodedToken = await this.tokenService.decode(command.accessToken)

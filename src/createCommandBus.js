@@ -14,6 +14,8 @@ const PartyShouldNotExistValidator = require('./Commands/CreateParty/validators/
 const DeletePartyHandler = require('./Commands/DeletePartyCommand/Handler')
 
 const JoinPartyHandler = require('./Commands/JoinParty/Handler')
+const PartyShouldExistValidator = require('./Commands/JoinParty/validators/PartyShouldExist')
+const CheckPasscodeValidator = require('./Commands/JoinParty/validators/CheckPasscode')
 
 const LeavePartyHandler = require('./Commands/LeaveParty/Handler')
 
@@ -38,7 +40,13 @@ module.exports = function createCommandBus ({
       new CreatePartyPayloadValidator()
     ),
     new DeletePartyHandler(userRepository, partyRepository),
-    new JoinPartyHandler(tokenService, partyRepository, userRepository),
+    new ValidatorDecorator(
+      new ValidatorDecorator(
+        new JoinPartyHandler(tokenService, partyRepository, userRepository),
+        new CheckPasscodeValidator(partyRepository)
+      ),
+      new PartyShouldExistValidator(partyRepository)
+    ),
     new LeavePartyHandler(userRepository),
     new SendSignalingAnswerHandler(userRepository),
     new SendSignalingCandidateHandler(userRepository),
