@@ -3,7 +3,7 @@ const Response = require('../Response')
 module.exports = class ValidatorDecorator {
   /**
    * Builds the decorator.
-   * @param {{ handle: Function }} handler - The decorated handler.
+   * @param {{ handle: Function, listenTo: Function }} handler - The decorated handler.
    * @param {{ validate: Function }} validator - A callback function to validate the command.
    */
   constructor (handler, validator) {
@@ -18,5 +18,9 @@ module.exports = class ValidatorDecorator {
     } catch (err) {
       return Response.withError(err)
     }
+  }
+
+  listenTo () {
+    return this.handler.listenTo()
   }
 }
