@@ -6,9 +6,9 @@ const baseHandler = {
 }
 
 test('Should return an error response when the validator fails', async () => {
-  const validator = jest.fn(() =>
-    Promise.reject(new Error('Validation failed'))
-  )
+  const validator = {
+    validate: jest.fn(() => Promise.reject(new Error('Validation failed')))
+  }
   const handler = new ValidatorDecorator(baseHandler, validator)
   const command = {}
 
@@ -19,7 +19,9 @@ test('Should return an error response when the validator fails', async () => {
 
 test('Should return the baseHandler result otherwise', async () => {
   baseHandler.handle.mockResolvedValue(Response.withValue('Success!'))
-  const validator = jest.fn().mockResolvedValue(null)
+  const validator = {
+    validate: jest.fn().mockResolvedValue(null)
+  }
   const handler = new ValidatorDecorator(baseHandler, validator)
   const command = {}
 

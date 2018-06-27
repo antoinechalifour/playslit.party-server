@@ -4,7 +4,7 @@ module.exports = class ValidatorDecorator {
   /**
    * Builds the decorator.
    * @param {{ handle: Function }} handler - The decorated handler.
-   * @param {Function} validator - A callback function to validate the command.
+   * @param {{ validate: Function }} validator - A callback function to validate the command.
    */
   constructor (handler, validator) {
     this.handler = handler
@@ -13,7 +13,7 @@ module.exports = class ValidatorDecorator {
 
   async handle (command) {
     try {
-      await this.validator(command)
+      await this.validator.validate(command)
       return this.handler.handle(command)
     } catch (err) {
       return Response.withError(err)
