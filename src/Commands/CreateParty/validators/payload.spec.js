@@ -1,4 +1,4 @@
-const Validator = require('./payload')
+const Validator = require('./Payload')
 const Command = require('../Command')
 
 const rejectedValues = {
@@ -33,3 +33,11 @@ Object.keys(rejectedValues).forEach(erroredField => {
     })
   )
 })
+
+acceptedValues.forEach(command =>
+  test(`Accepts command ${JSON.stringify(command)}`, () => {
+    const validator = new Validator()
+
+    expect(() => validator.validate(command)).not.toThrow()
+  })
+)
