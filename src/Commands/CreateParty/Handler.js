@@ -16,16 +16,6 @@ module.exports = class CreatePartyHandler {
    * @param {{ partyName: string, code: string, hostId: string}} command - The command.
    */
   async handle (command) {
-    const existingParty = await this.partyRepository.findByName(
-      command.partyName
-    )
-
-    if (existingParty) {
-      return CommandResponse.withError(
-        new Error(`Party "${command.partyName}" already exists`)
-      )
-    }
-
     const user = await this.userRepository.create()
     const party = await this.partyRepository.create(
       command.partyName,
