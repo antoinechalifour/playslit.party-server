@@ -5,6 +5,9 @@ const LoggerMiddleware = require('./Commands/middlewares/LoggerMiddleware')
 
 // Utils
 const ValidatorDecorator = require('./Commands/decorators/Validator')
+const PropertyValidator = require('./Commands/validators/PropertyValidator')
+const validateString = require('./Commands/validators/helpers/validateString')
+const validateRtc = require('./Commands/validators/helpers/validateRtc')
 
 // Handles
 const CreatePartyHandler = require('./Commands/CreateParty/Handler')
@@ -32,6 +35,7 @@ module.exports = function createCommandBus ({
   userRepository
 }) {
   const handlers = [
+    // CreateParty
     new ValidatorDecorator(
       new ValidatorDecorator(
         new CreatePartyHandler(userRepository, partyRepository),
@@ -39,7 +43,11 @@ module.exports = function createCommandBus ({
       ),
       new CreatePartyPayloadValidator()
     ),
+
+    // DeleteParty
     new DeletePartyHandler(userRepository, partyRepository),
+
+    // JoinParty
     new ValidatorDecorator(
       new ValidatorDecorator(
         new JoinPartyHandler(tokenService, partyRepository, userRepository),
@@ -47,10 +55,27 @@ module.exports = function createCommandBus ({
       ),
       new PartyShouldExistValidator(partyRepository)
     ),
+
+    // LeaveParty
     new LeavePartyHandler(userRepository),
-    new SendSignalingAnswerHandler(userRepository),
-    new SendSignalingCandidateHandler(userRepository),
-    new SendSignalingOfferHandler(userRepository)
+
+    // SendSignalingAnswer
+    new ValidatorDecorator(
+      new SendSignalingAnswerHandler(userRepository),
+      new PropertyValidator('description', validateRtc.validateAnswer)
+    ),
+
+    // SendSignalingCandidate
+    new ValidatorDecorator(
+      new SendSignalingCandidateHandler(userRepository),
+      new PropertyValidator('candidate', validateRtc.validateIceCandidate)
+    ),
+
+    // SendSignalingOffer
+    new ValidatorDecorator(
+      new SendSignalingOfferHandler(userRepository),
+      new PropertyValidator('description', validateRtc.validateOffer)
+    )
   ]
   const bus = new LoggerMiddleware(
     new EventBusDispatcherMiddleware(new Dispatcher(handlers), eventBus),

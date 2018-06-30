@@ -27,7 +27,8 @@ module.exports = class LoggerMiddleware {
     const after = new Date()
 
     console.log('\n---\n')
-    this.logger.log(`(command)/${commandType} took ${after - before}ms`, {
+    this.logger.log(`(command)/${commandType} took ${after - before}ms`)
+    this.logger.log({
       command,
       response
     })
