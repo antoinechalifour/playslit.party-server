@@ -4,6 +4,7 @@ function validatePartyName (partyName) {
   const errorMessage = 'Invalid argument partyName'
 
   assert(typeof partyName === 'string', errorMessage)
+  assert(partyName.length <= 30, errorMessage)
 
   const reg = /[a-z0-9_-]+/g
   const matches = partyName.match(reg)
@@ -15,7 +16,9 @@ function validatePartyName (partyName) {
 
 function validateCode (code) {
   const errorMessage = 'Invalid argument code'
+
   assert(typeof code === 'string', errorMessage)
+  assert(code.length <= 30, errorMessage)
 
   if (code.length < 1) {
     throw new Error(errorMessage)

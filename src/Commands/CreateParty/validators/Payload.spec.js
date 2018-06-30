@@ -7,9 +7,11 @@ const rejectedValues = {
     new Command('', '1234', 'host-id'),
     new Command('my party', '1234', 'host-id'),
     new Command('My party', '1234', 'host-id'),
-    new Command('My%party', '1234', 'host-id')
+    new Command('My%party', '1234', 'host-id'),
+    new Command('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1234', 'host-id')
   ],
   code: [
+    new Command('my-party', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'host-id'),
     new Command('my-party', null, 'host-id'),
     new Command('my-party', '', 'host-id')
   ],
@@ -18,7 +20,9 @@ const rejectedValues = {
 
 const acceptedValues = [
   new Command('my_party', 'test', 'host-id'),
-  new Command('my-party', '1234', 'host-id')
+  new Command('my-party', '1234', 'host-id'),
+  new Command('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1234', 'host-id'), // Max length: 30chars
+  new Command('my-party', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'host-id') // Max length: 30chars
 ]
 
 Object.keys(rejectedValues).forEach(erroredField => {
