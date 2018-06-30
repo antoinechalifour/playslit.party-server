@@ -6,7 +6,6 @@ const LoggerMiddleware = require('./Commands/middlewares/LoggerMiddleware')
 // Utils
 const ValidatorDecorator = require('./Commands/decorators/Validator')
 const PropertyValidator = require('./Commands/validators/PropertyValidator')
-const validateString = require('./Commands/validators/helpers/validateString')
 const validateRtc = require('./Commands/validators/helpers/validateRtc')
 
 // Handles
